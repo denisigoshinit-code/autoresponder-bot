@@ -1,0 +1,6 @@
+{
+  "welcome_message": "Привет! Я — Auto Buiseness бот. Чем могу помочь?",
+  "help_message": "Доступные команды:\n/start — приветствие\n/help — справка\n/feedback — связаться",
+  "feedback_prompt": "Введите ваше имя:",
+  "spam_keywords": ["спам", "реклама", "боты в дар"]
+}
