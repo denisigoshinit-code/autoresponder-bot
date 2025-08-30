@@ -1,3 +1,5 @@
+# bot/main.py
+from server import run_http_server  
 import asyncio
 import logging
 import os
@@ -46,6 +48,7 @@ async def main():
     ])
 
     logger.info("✅ Бот запущен и готов к работе")
+    run_http_server()  # ← Запускаем сервер
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
