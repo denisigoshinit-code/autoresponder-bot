@@ -1,4 +1,5 @@
-import json  # ← добавлено
+import os  # ← Добавлено
+import json
 from aiogram import Router, F
 from aiogram.types import Message
 import logging
@@ -42,12 +43,10 @@ async def handle_message(message: Message):
             await message.reply(response)
             return
 
-    try:
-        with open(".env", "r") as f:
-            env_data = f.read()
-        admin_id = env_data.split("ADMIN_ID=")[1].strip().split("\n")[0]
-    except Exception as e:
-        logger.error("ADMIN_ID не найден в .env")
+    # ✅ Исправлено: читаем ADMIN_ID через os.getenv()
+    admin_id = os.getenv("ADMIN_ID")
+    if not admin_id:
+        logger.error("❌ ADMIN_ID не установлен в переменных окружения")
         return
 
     forward_msg = (

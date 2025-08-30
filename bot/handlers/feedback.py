@@ -1,4 +1,5 @@
-import json  # ← добавлено
+import os  # ← Добавлено: для чтения переменных окружения
+import json
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import Command
@@ -41,12 +42,10 @@ async def feedback_contact(message: Message, state: FSMContext):
     full_name = user.full_name or "Аноним"
     username = f"@{user.username}" if user.username else "не указан"
 
-    try:
-        with open(".env", "r") as f:
-            env_data = f.read()
-        admin_id = env_data.split("ADMIN_ID=")[1].strip().split("\n")[0]
-    except Exception as e:
-        await message.answer("Ошибка отправки. Попробуйте позже.")
+    # ✅ Исправлено: читаем ADMIN_ID через os.getenv()
+    admin_id = os.getenv("ADMIN_ID")
+    if not admin_id:
+        await message.answer("❌ Ошибка: ID администратора не задан.")
         await state.clear()
         return
 
@@ -63,5 +62,6 @@ async def feedback_contact(message: Message, state: FSMContext):
         await bot.send_message(chat_id=admin_id, text=feedback_msg, parse_mode="HTML")
         await message.answer("Спасибо! Я передал ваше сообщение.")
     except Exception as e:
-        await message.answer("Не удалось отправить. Проверьте ID админа.")
+        await message.answer("Не удалось отправить. Проверьте настройки бота.")
+        print(f"Ошибка отправки админу: {e}")
     await state.clear()
